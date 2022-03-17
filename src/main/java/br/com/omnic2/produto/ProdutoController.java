@@ -20,12 +20,14 @@ public class ProdutoController {
     @Autowired
     private ProdutoRepo produtoRepo;
 
+    // ROLE_CLIENTE
     @GetMapping
     public Page<ProdutoDto> readAll(@PageableDefault(page = 0, size = 10) Pageable pageable) {
         Page<Produto> produtos = produtoRepo.findAll(pageable);
         return new ProdutoDto().convert(produtos);
     }
 
+    // ROLE_CLIENTE
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoDto> readById(@PathVariable("id") Long id) {
         Optional<Produto> produtoOptional = produtoRepo.findById(id);
@@ -35,6 +37,7 @@ public class ProdutoController {
         return ResponseEntity.notFound().build();
     }
 
+    // ROLE_ADMINISTRADOR
     @PostMapping
     @Transactional
     public ResponseEntity<ProdutoDto> create(@RequestBody @Valid ProdutoForm produtoForm, UriComponentsBuilder uriBuilder) {
@@ -45,6 +48,7 @@ public class ProdutoController {
         return ResponseEntity.created(uri).body(new ProdutoDto(produto));
     }
 
+    // ROLE_ADMINISTRADOR
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<ProdutoDto> update(@PathVariable("id") Long id, @RequestBody @Valid ProdutoUpdateForm produtoUpdateForm) {
@@ -56,6 +60,7 @@ public class ProdutoController {
         return ResponseEntity.notFound().build();
     }
 
+    // ROLE_ADMINISTRADOR
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
