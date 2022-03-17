@@ -18,6 +18,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepo usuarioRepo;
 
+    @Autowired
+    private PerfilRepo perfilRepo;
+
     @GetMapping
     public List<UsuarioDto> readAll() {
         List<Usuario> usuarios = usuarioRepo.findAll();
@@ -37,6 +40,10 @@ public class UsuarioController {
     @Transactional
     public ResponseEntity<UsuarioDto> create(@RequestBody @Valid UsuarioForm usuarioForm, UriComponentsBuilder uriBuilder) {
         Usuario usuario = usuarioForm.convert();
+        Optional<Perfil> perfilOptional = perfilRepo.findByNome("ROLE_CLIENTE");
+        if(perfilOptional.isPresent()) {
+            usuario.setPerfil(perfilOptional.get());
+        }
         usuarioRepo.save(usuario);
 
         URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri();

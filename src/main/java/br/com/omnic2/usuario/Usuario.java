@@ -85,6 +85,10 @@ public class Usuario implements UserDetails {
         this.perfis = perfis;
     }
 
+    public void setPerfil(Perfil perfil) {
+        this.perfis.add(perfil);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.perfis;
